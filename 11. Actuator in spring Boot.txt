@@ -1,0 +1,110 @@
+﻿=========================
+Actuator in spring Boot
+=========================
+
+
+=> Actuators are used to monitor and manage our spring boot applications.
+
+
+=> We can get "Production ready features" by using actuators in our project.
+
+
+=> With the help of actuators we can get below details
+
+
+        - Health of app
+
+
+        - Beans loaded
+
+
+        - Metrics
+
+
+        - Loggers
+
+
+        - URL Mappings
+
+
+        - Thread Dump
+
+
+        - Heap Dump
+
+
+
+
+=> To work with actuators we need to add below dependency
+
+
+<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+
+Note: With above dependency, By default /health endpoint will be exposed.
+
+
+=> We need to write below property to expose other endpoints
+
+
+        management.endpoints.web.exposure.include=*
+
+
+=> We can exclude actuator endpoint like below
+
+
+        management.endpoints.web.exposure.exclude=beans
+
+
+
+
+==============
+Endpoint URLS
+==============
+
+
+/health : health of the app  (UP or DOWN)        
+
+
+/beans : Spring Beans loaded
+
+
+/configprops : Properties loaded
+
+
+/mappings : URL patterns of our application
+
+
+/loggers : Logs of our applications
+
+
+/threaddump : Threads info
+
+
+/heapdump  : Heap info
+
+
+/shutdown : Stop server  (HTTP POST Request)
+
+
+=============================
+What is shutdown endpoint ?
+=============================
+
+
+=> It is used to stop the application.
+
+
+Note: We need to enable shutdown endpiont in our properties/yml file like below
+
+
+                management.endpoint.shutdown.enabled=tu
+
+
+Note: Shutdown endpoint is mapped to POST request. We can send post request using POSTMAN.
+
+
+=====================================================================

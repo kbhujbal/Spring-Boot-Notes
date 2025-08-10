@@ -1,0 +1,125 @@
+﻿==============================
+What is a REST Repository ?
+==============================
+
+
+=> A REST Repository is a feature provided by Spring Data REST module.
+
+
+=> Without writing REST Controller we can perform REST API based crud operations using REST Repository concept.
+
+
+Note: It will expose our JPA Repository as a REST Controller.
+
+
+                REST Repository = REST Controller + Jpa Repository
+
+
+
+
+=> Instead of manually writing REST controllers, you define a repository interface, and Spring Data REST will expose standard REST endpoints for you.
+
+
+
+
+================================
+Application Development Process        
+===============================
+
+
+Step-1 : Create Boot app with below dependencies
+
+
+                a) rest repositories
+
+
+                b) data-jpa-starter
+
+
+                c) mysql-connector
+
+
+                d) devtools
+
+
+                e) lombok        
+
+
+Step-2 : Configure data source properties in application.yml file
+
+
+Step-3 : Create Entity class and Repository interface
+
+
+```
+@Entity
+@Data
+public class Student {
+
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+        private String name;
+        private String email;
+}
+
+
+```
+
+
+@RepositoryRestResource
+public interface StudentRepo extends JpaRepository<Student, Long> {
+
+
+}
+
+
+```
+
+
+Note: Represent our JPA Repository as REST Repository using @RepositoryRestResource.
+
+
+Step-4 : Start the application and Test REST Endpoints using POSTMAN.                
+
+
+=================================================================
+
+
+GET ALL Students : GET :: http://localhost:8080/students
+
+
+Create Student : POST :: http://localhost:8080/students
+
+
+Update Student : PUT :: http://localhost:8080/students/{id}
+
+
+Delete Student : DELETE :: http://localhost:8080/students/{id}
+
+
+===================================================================
+
+
+{
+    "name" : "B. Ashok",
+    "email" : "ashok@gmail.com"
+}
+
+
+==================================================================
+
+
+=> No need to write boilerplate REST controller code.
+
+
+=> Rapid API development.
+
+
+
+
+Note: When we have requirement to implement business logics, validation logics, email sending, encryption, decryption then it is not recommended.
+
+
+==================================================================

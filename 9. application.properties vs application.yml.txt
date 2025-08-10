@@ -1,0 +1,202 @@
+﻿==========================================
+application.properties vs application.yml
+==========================================
+
+
+In Spring Boot, configuration files are used to define settings like below
+
+
+                1) port number
+
+
+                2) database connection 
+
+
+                3) log levels etc.
+
+
+==============================
+ðŸ“˜ application.properties
+==============================
+
+
+=> Represents data in simple key-value format
+=> Each property will be there in new line
+
+
+âœ… Pros:
+
+
+=> Easy to read and write for simple configurations
+
+
+=> Widely used in java applications
+
+
+=> Good for flat configurations
+
+
+âŒ Cons:
+
+
+=> Gets messy for complex or nested configurations
+
+
+=> Duplicate keywords
+
+
+=> Support only for java applications
+
+
+=> Not ideal for structured data like lists or maps
+
+
+Ex : 
+
+
+server.port=8080
+spring.datasource.url=jdbc:mysql://localhost:3306/mydb
+spring.datasource.username=root
+spring.datasource.password=pass
+
+
+
+
+Note: application.yml is an alternate for application.properties file
+
+
+====================
+ðŸ“’ application.yml
+====================
+
+
+=> YAML format
+
+
+=> Supports hierarchical/nested configuration
+
+
+âœ… Pros:
+
+
+=> Clean and readable, especially for nested properties
+
+
+=> Better organization of related settings
+
+
+=> Preferred for complex configurations (like multiple datasources, profiles, mail settings)
+
+
+=> Supported by multiple programming languages.
+
+
+
+
+âŒ Cons:
+
+
+=> Indentation errors
+
+
+=> Might be tricky for beginners who are unfamiliar with YAML
+
+
+Ex:
+
+
+server:
+  port: 8080
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydb
+    username: root
+    password: pass
+
+
+
+
+===========================================
+How to read yml file data into java class
+===========================================
+
+
+=> @Value annotation is used to read the data from a yml or properties file based on key
+
+
+      @Value("${app.messages.greet}")
+      private String greetMsg;
+
+
+=> If we want to read all yml properties at a time into java class object then we can use @ConfigurationProperties(prefix="app") annotation.
+
+
+```
+spring:
+  application:
+    name: 16-REST-API
+    
+app:
+  messages:
+    greet: Good Mrng..!!
+    welcome: Welcome to Ashok IT
+    invalidLogin: Invalid Credentials
+    regSuccess: Registration Successful
+    invalidEmail: Email Invalid
+
+
+```
+@Data
+@Component
+@ConfigurationProperties(prefix="app")
+public class AppProperties {
+
+
+  private Map<String, String> messages = new HashMap<>();
+
+
+}
+```
+@RestController
+@RequestMapping("/api")
+public class MsgRestController {
+
+
+  @Value("${app.messages.greet}")
+  private String greetMsg;
+
+
+  @Autowired
+  private AppProperties appProps;
+
+
+  @GetMapping(value = "/greet", produces = "text/plain")
+  public String getGreetMsg(@RequestParam("name") String name) {
+
+
+    String msg = name + ", " + greetMsg;
+
+
+    return msg;
+  }
+
+
+  @GetMapping(value = "/welcome/{name}", produces = "text/plain")
+  public ResponseEntity<String> getWelcomeMsg(@PathVariable String name) {
+
+
+    Map<String, String> messages = appProps.getMessages();
+
+
+    String welcomeMsg = messages.get("welcome");
+
+
+    String msg = name + ", " + welcomeMsg;
+
+
+    return new ResponseEntity<>(msg, HttpStatus.OK);
+  }
+}
+```
